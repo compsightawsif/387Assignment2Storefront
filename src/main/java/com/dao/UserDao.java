@@ -21,7 +21,7 @@ public class UserDao {
 		User user = null;
 		
 		try {
-			query = "select * from users where username = ? and password = ?";
+			query = "select * from user where username = ? and password = ?";
 		
 			pst = this.connection.prepareStatement(query);
 			pst.setString(1, username);
@@ -30,7 +30,7 @@ public class UserDao {
 			System.out.println(rs);
 			if (rs.next()) {
 				user = new User();
-				user.setId(rs.getInt("id"));
+				user.setId(rs.getInt("user_id"));
 				user.setUsername(rs.getString("username"));
 				user.setEmail(rs.getString("email"));
 				user.setRole(rs.getString("role"));
