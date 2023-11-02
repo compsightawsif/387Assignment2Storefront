@@ -17,14 +17,14 @@ public class UserDao {
 		this.connection = connection;
 	}
 	
-	public User userLogin(String email, String password) throws SQLException {
+	public User userLogin(String username, String password) throws SQLException {
 		User user = null;
 		
 		try {
-			query = "insert into users values (2,\"test2\",\"test3\",\"test4\",\"test5\");";
+			query = "select * from users where username = ? and password = ?";
 		
 			pst = this.connection.prepareStatement(query);
-			pst.setString(1, email);
+			pst.setString(1, username);
 			pst.setString(2, password);
 			rs = pst.executeQuery();
 			System.out.println(rs);

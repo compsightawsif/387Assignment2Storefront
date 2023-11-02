@@ -19,8 +19,8 @@
                 <div class="card-body">
                     <form action="user-login" method="POST">
                         <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="text" class="form-control" id="email" name="email" required>
+                            <label for="email">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
                         </div>
                         <div class="form-group">
                             <label for="password">Password</label>

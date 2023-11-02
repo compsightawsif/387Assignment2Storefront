@@ -33,14 +33,15 @@ public class LoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 		try(PrintWriter out = response.getWriter()) {
-		String email = request.getParameter("email");
+		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		
 		try {
 			UserDao udao = new UserDao(DBConnection.getConnection());
-			User user = udao.userLogin(email, password);
+			User user = udao.userLogin(username, password);
 			if (user != null) {
-				out.print("user login");
+				request.getSession().setAttribute("auth",user);
+				response.sendRedirect("main.jsp");
 			}
 			else {
 				out.print("user login failed");
