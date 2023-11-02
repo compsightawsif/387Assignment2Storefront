@@ -19,7 +19,7 @@
                 <div class="card-body">
                     <form action="user-login" method="POST">
                         <div class="form-group">
-                            <label for="username">Email</label>
+                            <label for="email">Email</label>
                             <input type="text" class="form-control" id="email" name="email" required>
                         </div>
                         <div class="form-group">
