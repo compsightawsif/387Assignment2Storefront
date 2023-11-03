@@ -54,12 +54,12 @@
 
     <!-- Product Creation Form -->
     <h2>Create a New Product</h2>
-    <form action="createProductServlet" method="post">
+    <form action="create-product" method="post">
         <label for="productName">Product Name:</label>
         <input type="text" id="productName" name="productName" required>
         <br>
-        <label for="productPrice">Price:</label>
-        <input type="number" id="productPrice" name="productPrice" required>
+        <label for="sku">SKU:</label>
+        <input type="text" id="sku" name="sku" required>
         <br>
         <button type="submit">Create Product</button>
     </form>
