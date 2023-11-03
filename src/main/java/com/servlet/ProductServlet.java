@@ -76,7 +76,7 @@ public class ProductServlet extends HttpServlet {
             try {
                 ProductDao pdao = new ProductDao(DBConnection.getConnection());
                 Product product = pdao.createProduct(sku, name);
-                response.sendRedirect("staff-main.jsp");
+                response.sendRedirect("/387Assignment2Storefront/staff-main.jsp");
             } catch (ClassNotFoundException | SQLException e) {
                 e.printStackTrace();
 
