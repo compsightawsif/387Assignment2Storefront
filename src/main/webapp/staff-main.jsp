@@ -1,4 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.model.Product" %>
+<%@ page import="com.dao.ProductDao" %>
+<%@ page import="com.connection.DBConnection" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -49,12 +53,44 @@
     </style>
 </head>
 <body>
+<h2>Product List</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>SKU</th>
+        <th>Vendor</th>
+        <th>urlSlug</th>
+    </tr>
+    </thead>
+    <tbody>
+    <%
+        ProductDao productDAO = new ProductDao(DBConnection.getConnection()); // Initialize the ProductDAO with your database connection
+        List<Product> products = productDAO.getAllProducts(); // Retrieve the products from the database
+
+        for (Product product : products) {
+    %>
+    <tr>
+        <td><%= product.getName() %></td>
+        <td><%= product.getDescription() %></td>
+        <td><%= product.getPrice() %></td>
+        <td><%= product.getSku() %></td>
+        <td><%= product.getVendor() %></td>
+        <td><%= product.getUrlslug() %></td>
+    </tr>
+    <%
+        }
+    %>
+    </tbody>
+</table>
 <div class="container">
     <h1>Welcome, Staff Member!</h1>
 
     <!-- Product Creation Form -->
     <h2>Create a New Product</h2>
-    <form action="create-product" method="post">
+    <form action="products/create" method="post">
         <label for="productName">Product Name:</label>
         <input type="text" id="productName" name="productName" required>
         <br>
