@@ -99,9 +99,10 @@
     <p></p>
     <h2>Update a Product</h2>
     <form action="products/update" method="post">
-        <label for="productIdToUpdate">Id:</label>
-        <input type="number" id="productIdToUpdate" name="productIdToUpdate" required>
+        <label for="productSKUToUpdate">Product SKU:</label>
+        <input type="text" id="productSKUToUpdate" name="productSKUToUpdate" required>
         <br>
+        ---------------------------------------------------
         <label for="productNameToUpdate">Product Name:</label>
         <input type="text" id="productNameToUpdate" name="productNameToUpdate" required>
         <br>
@@ -110,9 +111,6 @@
         <br>
         <label for="productPriceToUpdate">Product Price:</label>
         <input type="number" id="productPriceToUpdate" step=".01" name="productPriceToUpdate" required>
-        <br>
-        <label for="productSKUToUpdate">Product SKU:</label>
-        <input type="text" id="productSKUToUpdate" name="productSKUToUpdate" required>
         <br>
         <label for="productVendorToUpdate">Product Vendor:</label>
         <input type="text" id="productVendorToUpdate" name="productVendorToUpdate" required>
