@@ -96,8 +96,33 @@
         <br>
         <button type="submit">Create Product</button>
     </form>
-
-    <!-- Order Shipping Form -->
+    <p></p>
+    <h2>Update a Product</h2>
+    <form action="products/update" method="post">
+        <label for="productIdToUpdate">Id:</label>
+        <input type="number" id="productIdToUpdate" name="productIdToUpdate" required>
+        <br>
+        <label for="productNameToUpdate">Product Name:</label>
+        <input type="text" id="productNameToUpdate" name="productNameToUpdate" required>
+        <br>
+        <label for="productDescriptionToUpdate">Product Description:</label>
+        <input type="text" id="productDescriptionToUpdate" name="productDescriptionToUpdate" required>
+        <br>
+        <label for="productPriceToUpdate">Product Price:</label>
+        <input type="number" id="productPriceToUpdate" step=".01" name="productPriceToUpdate" required>
+        <br>
+        <label for="productSKUToUpdate">Product SKU:</label>
+        <input type="text" id="productSKUToUpdate" name="productSKUToUpdate" required>
+        <br>
+        <label for="productVendorToUpdate">Product Vendor:</label>
+        <input type="text" id="productVendorToUpdate" name="productVendorToUpdate" required>
+        <br>
+        <label for="productSlugToUpdate">Product Url Slug:</label>
+        <input type="text" id="productSlugToUpdate" name="productSlugToUpdate" required>
+        <br>
+        <button type="submit">Update Product</button>
+    </form>
+    <p></p>
     <h2>Ship an Order</h2>
     <form action="order/ship" method="post">
         <label for="orderID">Order ID:</label>

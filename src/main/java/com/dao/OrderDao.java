@@ -20,9 +20,7 @@ public class OrderDao {
         this.connection = connection;
     }
 
-    public Order shipOrder(int orderId, String trackingNumber) throws SQLException {
-        Order product = null;
-
+    public void shipOrder(int orderId, String trackingNumber) throws SQLException {
         try {
             query = "update storefront.order set status = 'SHIPPED' WHERE order_id=? and tracking_number=?;";
             pst = this.connection.prepareStatement(query);
@@ -34,8 +32,6 @@ public class OrderDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return product;
 
     }
 
@@ -94,7 +90,6 @@ public class OrderDao {
             pst.setInt(1, user_id);
             pst.setInt(2, order_id);
             rs = pst.executeQuery();
-            System.out.println(rs);
             while (rs.next()) {
                 Order order = new Order();
                 order.setId(rs.getInt("order_id"));

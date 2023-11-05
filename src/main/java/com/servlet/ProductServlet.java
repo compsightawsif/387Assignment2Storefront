@@ -75,7 +75,25 @@ public class ProductServlet extends HttpServlet {
             String name = request.getParameter("productName");
             try {
                 ProductDao pdao = new ProductDao(DBConnection.getConnection());
-                Product product = pdao.createProduct(sku, name);
+                pdao.createProduct(sku, name);
+                response.sendRedirect("/387Assignment2Storefront/staff-main.jsp");
+            } catch (ClassNotFoundException | SQLException e) {
+                e.printStackTrace();
+
+            }
+
+        } else if (pathInfo != null && pathInfo.equals("/update")) {
+            response.setContentType("text/html;charset=UTF-8");
+            int id = Integer.parseInt(request.getParameter("productIdToUpdate"));
+            String name = request.getParameter("productNameToUpdate");
+            String description = request.getParameter("productDescriptionToUpdate");
+            double price = Double.parseDouble(request.getParameter("productPriceToUpdate"));
+            String sku = request.getParameter("productSKUToUpdate");
+            String vendor = request.getParameter("productVendorToUpdate");
+            String slug = request.getParameter("productSlugToUpdate");
+            try {
+                ProductDao pdao = new ProductDao(DBConnection.getConnection());
+                pdao.updateProduct(id, name, description, price, sku, vendor, slug);
                 response.sendRedirect("/387Assignment2Storefront/staff-main.jsp");
             } catch (ClassNotFoundException | SQLException e) {
                 e.printStackTrace();

@@ -1,5 +1,6 @@
 package com.dao;
 
+import com.model.Order;
 import com.model.Product;
 
 import java.sql.Connection;
@@ -19,8 +20,7 @@ public class ProductDao {
         this.connection = connection;
     }
 
-    public Product createProduct(String sku, String name) throws SQLException {
-        Product product = null;
+    public void createProduct(String sku, String name) throws SQLException {
 
         try {
             query = "INSERT INTO Product (SKU, Name, Description, Price, Vendor, urlSlug) VALUES (?, ?, '',0.00, '','');";
@@ -29,18 +29,33 @@ public class ProductDao {
             pst.setString(2, name);
             pst.execute();
             System.out.println("pst: " + pst);
-//            if (rs.next()) {
-//                product = new Product();
-//                product.setId(rs.getInt("product_id"));
-//                product.setName(rs.getString("name"));
-//                product.setSku(rs.getString("sku"));
-//            }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return product;
+    }
+
+    public void updateProduct(int id, String name, String description, double price, String sku, String vendor, String slug) throws SQLException {
+        Product product = null;
+        try {
+            query = "update storefront.product set name = ?, description = ?, price = ?, sku = ?, vendor=?, urlSlug=? WHERE product_id=?;";
+            pst = this.connection.prepareStatement(query);
+            pst.setString(1, name);
+            pst.setString(2, description);
+//            2 decimals
+            String formatPrice = String.format("%.2f",price);
+            price = Double.parseDouble(formatPrice);
+            pst.setDouble(3, price);
+            pst.setString(4, sku);
+            pst.setString(5, vendor);
+            pst.setString(6, slug);
+            pst.setInt(7, id);
+            pst.execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 
