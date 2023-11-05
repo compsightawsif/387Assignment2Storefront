@@ -2,6 +2,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.model.Product" %>
 <%@ page import="com.dao.ProductDao" %>
+<%@ page import="com.model.Order" %>
+<%@ page import="com.dao.OrderDao" %>
 <%@ page import="com.connection.DBConnection" %>
 <!DOCTYPE html>
 <html>
@@ -83,6 +85,42 @@
     <%
         }
     %>
+    <br>
+    <br>
+
+    </tbody>
+</table>
+<p></p>
+<table>
+    <thead>
+    <tr>
+        <th>Order Id</th>
+        <th>User Id</th>
+        <th>Order Date</th>
+        <th>Status</th>
+        <th>Tracking Number</th>
+    </tr>
+    </thead>
+    <tbody>
+    <%
+        OrderDao orderDAO = new OrderDao(DBConnection.getConnection()); // Initialize the ProductDAO with your database connection
+        List<Order> orders = orderDAO.getAllOrders(); // Retrieve the products from the database
+
+        for (Order order : orders) {
+    %>
+    <tr>
+        <td><%= order.getId() %></td>
+        <td><%= order.getUserId() %></td>
+        <td><%= order.getOrderDate() %></td>
+        <td><%= order.getStatus() %></td>
+        <td><%= order.getTrackingNumber() %></td>
+    </tr>
+    <%
+        }
+    %>
+    <br>
+    <br>
+
     </tbody>
 </table>
 <div class="container">
@@ -102,10 +140,12 @@
 
     <!-- Order Shipping Form -->
     <h2>Ship an Order</h2>
-    <form action="shipOrderServlet" method="post">
+    <form action="order/ship" method="post">
         <label for="orderID">Order ID:</label>
         <input type="number" id="orderID" name="orderID" required>
         <br>
+        <label for="trackingNumber">Tracking Number:</label>
+        <input type="text" id="trackingNumber" name="trackingNumber" required>
         <button type="submit">Ship Order</button>
     </form>
 </div>
