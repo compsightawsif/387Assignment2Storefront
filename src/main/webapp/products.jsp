@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<!DOCTYPE html>
+<%@ page import="java.util.List" %>
+<%@ page import="com.model.Product" %>
+<%@ page import="com.dao.ProductDao" %>
+<%@ page import="com.model.Order" %>
+<%@ page import="com.dao.OrderDao" %>
+<%@ page import="com.connection.DBConnection" %><!DOCTYPE html>
 <html>
 <head>
     <title>Product Details</title>

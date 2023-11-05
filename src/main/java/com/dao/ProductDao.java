@@ -23,11 +23,12 @@ public class ProductDao {
     public void createProduct(String sku, String name) throws SQLException {
 
         try {
-            query = "INSERT INTO Product (SKU, Name, Description, Price, Vendor, urlSlug) VALUES (?, ?, '',0.00, '','');";
+            query = "INSERT INTO product (SKU, Name, Description, Price, Vendor, urlSlug) VALUES (?, ?, '',0.00, '','');";
             pst = this.connection.prepareStatement(query);
             pst.setString(1, sku);
             pst.setString(2, name);
             pst.execute();
+            System.out.println("pst: " + pst);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -35,10 +36,10 @@ public class ProductDao {
 
     }
 
-    public void updateProduct(String sku, String name, String description, double price, String vendor, String slug) throws SQLException {
+    public void updateProduct(int id, String name, String description, double price, String sku, String vendor, String slug) throws SQLException {
         Product product = null;
         try {
-            query = "update storefront.product set name = ?, description = ?, price = ?, vendor=?, urlSlug=? WHERE sku=?;";
+            query = "update storefront.product set name = ?, description = ?, price = ?, sku = ?, vendor=?, urlSlug=? WHERE product_id=?;";
             pst = this.connection.prepareStatement(query);
             pst.setString(1, name);
             pst.setString(2, description);
@@ -46,9 +47,10 @@ public class ProductDao {
             String formatPrice = String.format("%.2f",price);
             price = Double.parseDouble(formatPrice);
             pst.setDouble(3, price);
-            pst.setString(4, vendor);
-            pst.setString(5, slug);
-            pst.setString(6, sku);
+            pst.setString(4, sku);
+            pst.setString(5, vendor);
+            pst.setString(6, slug);
+            pst.setInt(7, id);
             pst.execute();
 
         } catch (SQLException e) {
@@ -59,7 +61,7 @@ public class ProductDao {
 
     public List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
-        String query = "SELECT * FROM Product"; // Adjust the query based on your actual table name
+        String query = "SELECT * FROM product"; // Adjust the query based on your actual table name
 
         try (PreparedStatement statement = connection.prepareStatement(query);
              ResultSet resultSet = statement.executeQuery()) {

@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<!DOCTYPE html>
+<%@ page import="java.util.List" %>
+<%@ page import="com.model.Product" %>
+<%@ page import="com.dao.ProductDao" %>
+<%@ page import="com.model.Order" %>
+<%@ page import="com.dao.OrderDao" %>
+<%@ page import="com.connection.DBConnection" %><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,23 +23,21 @@
     </ul>
 </div>
 
+<%
+    ProductDao productDAO = new ProductDao(DBConnection.getConnection()); // Initialize the ProductDAO with your database connection
+    List<Product> products = productDAO.getAllProducts(); // Retrieve the products from the database
+%>
+
 <div id="products">
     <h2>Products</h2>
+    <% for (Product product : products) { %>
     <div class="product">
-        <h3>Product 1</h3>
-        <p>Price: $10</p>
-        <button onclick="addToCart('Product 1', 10)">Add to Cart</button>
+        <h3><%= product.getName()%></h3>
+        <p><%= product.getPrice()%></p>
+        <button onclick="addToCart(<%= product.getName()%>, <%= product.getPrice()%>)">Add to Cart</button>
+        <button onclick="viewProductDetails(<%= product.getName()%>)">View Details</button>
     </div>
-    <div class="product">
-        <h3>Product 2</h3>
-        <p>Price: $15</p>
-        <button onclick="addToCart('Product 2', 15)">Add to Cart</button>
-    </div>
-    <div class="product">
-        <h3>Product 3</h3>
-        <p>Price: $20</p>
-        <button onclick="addToCart('Product 3', 20)">Add to Cart</button>
-    </div>
+    <%}%>
 </div>
 
 <script>
@@ -47,6 +50,10 @@
         const cartItemsList = document.getElementById('cart-items');
         cartItemsList.appendChild(cartItem);
     }
+
+    // function viewProductDetails(productName) {
+    //     window.location.href = 'product-details.jsp?product=' + encodeURIComponenent(productName);
+    // }
 </script>
     <%@include file="includes/footer.jsp" %>
 </body>
