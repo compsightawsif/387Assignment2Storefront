@@ -25,7 +25,6 @@
 <%
     ProductDao productDAO = new ProductDao(DBConnection.getConnection()); // Initialize the ProductDAO with your database connection
     List<Product> products = productDAO.getAllProducts(); // Retrieve the products from the database
-    CartDao cartDAO = new ProductDao(DBConnection.getConnection()); // Initialize the ProductDAO with your database connection
 %>
 
 <div id="products">
@@ -34,7 +33,11 @@
     <div class="product">
         <h3><%= product.getName()%></h3>
         <p><%= product.getPrice()%></p>
-        <button onclick="addToCart(<%= product.getName()%>, <%= product.getPrice()%>)">Add to Cart</button>
+        <form method="post" action="/cart/add">
+            <input type="hidden" name="productId" value="123"> <!-- Replace with your product ID -->
+            <input type="submit" value="Add to Cart">
+        </form>
+<%--        <button onclick="addToCart(<%= product.getName()%>, <%= product.getPrice()%>)">Add to Cart</button>--%>
         <button onclick="viewProductDetails(<%= product.getName()%>)">View Details</button>
     </div>
     <%}%>
