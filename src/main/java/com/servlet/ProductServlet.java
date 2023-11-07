@@ -47,16 +47,23 @@ public class ProductServlet extends HttpServlet {
 
 
         } else if (pathInfo.matches("/products/([a-zA-Z0-9-]+)")) {
-//            String slug = pathInfo.substring(pathInfo.lastIndexOf("/") + 1);
-//            Product product = YourDatabase.getProductBySlug(slug);
-//            if (product != null) {
-//                // Found the product
-//                response.setContentType("application/json");
-//                response.getWriter().write("{ \"name\": \"" + product.getName() + "\", \"slug\": \"" + product.getSlug() + "\" }");
-//            } else {
-//                // Product not found
-//                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-//            }
+            // Handle the request to display a specific product by slug
+            String slug = pathInfo.substring(pathInfo.lastIndexOf("/") + 1);
+            try {
+                ProductDao pdao = new ProductDao(DBConnection.getConnection());
+                Product product = pdao.getProductBySlug(slug);
+
+                if (product != null) {
+                    // Found the product
+                    request.setAttribute("product", product);
+                    request.getRequestDispatcher("/product-details.jsp").forward(request, response);
+                } else {
+                    // Product not found
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                }
+            } catch (ClassNotFoundException | SQLException e) {
+                e.printStackTrace();
+            }
 
         } else {
             // Handle invalid or unknown requests

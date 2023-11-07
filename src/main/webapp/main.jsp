@@ -2,8 +2,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.model.Product" %>
 <%@ page import="com.dao.ProductDao" %>
-<%@ page import="com.model.Order" %>
-<%@ page import="com.dao.OrderDao" %>
+<%@ page import="com.dao.CartDao" %>
 <%@ page import="com.connection.DBConnection" %><!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,6 +25,7 @@
 <%
     ProductDao productDAO = new ProductDao(DBConnection.getConnection()); // Initialize the ProductDAO with your database connection
     List<Product> products = productDAO.getAllProducts(); // Retrieve the products from the database
+    CartDao cartDAO = new ProductDao(DBConnection.getConnection()); // Initialize the ProductDAO with your database connection
 %>
 
 <div id="products">

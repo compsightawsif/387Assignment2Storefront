@@ -14,41 +14,20 @@
     <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
 <body>
-<h2>Product List</h2>
-<table>
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Price</th>
-        <th>SKU</th>
-        <th>Vendor</th>
-        <th>urlSlug</th>
-    </tr>
-    </thead>
-    <tbody>
-    <%
-        ProductDao productDAO = new ProductDao(DBConnection.getConnection()); // Initialize the ProductDAO with your database connection
-        List<Product> products = productDAO.getAllProducts(); // Retrieve the products from the database
+<%
+    ProductDao productDAO = new ProductDao(DBConnection.getConnection()); // Initialize the ProductDAO with your database connection
+    List<Product> products = productDAO.getAllProducts(); // Retrieve the products from the database
+%>
 
-        for (Product product : products) {
-    %>
-    <tr>
-        <td><%= product.getName() %></td>
-        <td><%= product.getDescription() %></td>
-        <td><%= product.getPrice() %></td>
-        <td><%= product.getSku() %></td>
-        <td><%= product.getVendor() %></td>
-        <td><%= product.getUrlslug() %></td>
-    </tr>
-    <%
-        }
-    %>
-    <br>
-    <br>
-
-    </tbody>
-</table>
+<div id="products">
+    <h2>Product List</h2>
+    <% for (Product product : products) { %>
+    <div class="product">
+        <a href="product-details.jsp?productID=<%= product.getId() %>"><%= product.getName()%></a>
+        <p><%= product.getPrice()%></p>
+    </div>
+    <%}%>
+</div>
 <p></p>
 <table>
     <thead>
@@ -68,11 +47,11 @@
         for (Order order : orders) {
     %>
     <tr>
-        <td><%= order.getId() %></td>
+        <td><a href="order-details.jsp?orderID=<%= order.getId() %>"><%= order.getId() %></a></td>
         <td><%= order.getUserId() %></td>
         <td><%= order.getOrderDate() %></td>
         <td><%= order.getStatus() %></td>
-        <td><%= order.getTrackingNumber() %></td>
+        <td><%= order.getTrackingNumber() %></td
     </tr>
     <%
         }
@@ -133,5 +112,6 @@
         <button type="submit">Ship Order</button>
     </form>
 </div>
+<%--<%@include file="includes/footer.jsp" %>--%>
 </body>
 </html>

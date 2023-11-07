@@ -22,10 +22,10 @@ public class OrderDao {
 
     public void shipOrder(int orderId, String trackingNumber) throws SQLException {
         try {
-            query = "update storefront.order set status = 'SHIPPED' WHERE order_id=? and tracking_number=?;";
+            query = "UPDATE storefront.order SET status = 'SHIPPED', tracking_number = ? WHERE order_id = ?;";
             pst = this.connection.prepareStatement(query);
-            pst.setInt(1, orderId);
-            pst.setString(2, trackingNumber);
+            pst.setString(1, trackingNumber);
+            pst.setInt(2, orderId);
             pst.execute();
             System.out.println("pst: " + pst);
 
@@ -105,6 +105,29 @@ public class OrderDao {
         }
 
         return orders;
+    }
+
+    public Order getOrderByID(int order_id) throws SQLException {
+        Order order = null;
+        try {
+            query = "SELECT * FROM storefront.order where order_id=?";
+            pst = this.connection.prepareStatement(query);
+            pst.setInt(1, order_id);
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                order = new Order();
+                order.setId(rs.getInt("order_id"));
+                order.setUserId(rs.getInt("user_id"));
+                order.setOrderDate(rs.getString("order_date"));
+                order.setStatus(rs.getString("status"));
+                order.setTrackingNumber(rs.getString("tracking_number"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return order;
     }
 }
 

@@ -20,6 +20,30 @@ public class ProductDao {
         this.connection = connection;
     }
 
+    public Product getProductBySlug(String slug) throws SQLException {
+        Product product = null;
+
+        query = "SELECT * FROM storefront.product where urlSlug=?";
+        try (PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            product = new Product();
+            product.setId(resultSet.getInt("product_id"));
+            product.setName(resultSet.getString("name"));
+            product.setDescription(resultSet.getString("description"));
+            product.setVendor(resultSet.getString("vendor"));
+            product.setUrlslug(resultSet.getString("urlSlug"));
+            product.setSku(resultSet.getString("sku"));
+            product.setPrice(resultSet.getDouble("price"));
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return product;
+
+    }
+
     public void createProduct(String sku, String name) throws SQLException {
 
         try {
@@ -44,7 +68,7 @@ public class ProductDao {
             pst.setString(1, name);
             pst.setString(2, description);
 //            2 decimals
-            String formatPrice = String.format("%.2f",price);
+            String formatPrice = String.format("%.2f", price);
             price = Double.parseDouble(formatPrice);
             pst.setDouble(3, price);
             pst.setString(4, sku);
