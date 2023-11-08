@@ -20,21 +20,49 @@ public class ProductDao {
         this.connection = connection;
     }
 
-    public Product getProductBySlug(String slug) throws SQLException {
+    public Product getProduct(String sku) throws SQLException {
         Product product = null;
 
-        query = "SELECT * FROM storefront.product where urlSlug=?";
+        query = "SELECT product.sku FROM storefront.product where sku=?";
         try (PreparedStatement statement = connection.prepareStatement(query);
              ResultSet resultSet = statement.executeQuery()) {
 
             product = new Product();
-            product.setId(resultSet.getInt("product_id"));
-            product.setName(resultSet.getString("name"));
-            product.setDescription(resultSet.getString("description"));
-            product.setVendor(resultSet.getString("vendor"));
-            product.setUrlslug(resultSet.getString("urlSlug"));
-            product.setSku(resultSet.getString("sku"));
-            product.setPrice(resultSet.getDouble("price"));
+            productAttributesResultSet(resultSet, product);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return product;
+    }
+
+    public Product getProductbyID(int id) throws SQLException {
+        Product product = null;
+
+        query = "SELECT product.product_id FROM storefront.product where product_id=?";
+        try (PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            product = new Product();
+            productAttributesResultSet(resultSet, product);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return product;
+    }
+
+    public Product getProductBySlug(String slug) throws SQLException {
+        Product product = null;
+
+        query = "SELECT product.urlslug FROM storefront.product where urlSlug=?";
+        try (PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            product = new Product();
+            productAttributesResultSet(resultSet, product);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -91,13 +119,7 @@ public class ProductDao {
              ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
                 Product product = new Product();
-                product.setId(resultSet.getInt("product_id"));
-                product.setName(resultSet.getString("name"));
-                product.setDescription(resultSet.getString("description"));
-                product.setVendor(resultSet.getString("vendor"));
-                product.setUrlslug(resultSet.getString("urlSlug"));
-                product.setSku(resultSet.getString("sku"));
-                product.setPrice(resultSet.getDouble("price"));
+                productAttributesResultSet(resultSet, product);
                 products.add(product);
             }
         } catch (SQLException e) {
@@ -105,6 +127,16 @@ public class ProductDao {
         }
 
         return products;
+    }
+
+    private void productAttributesResultSet(ResultSet resultSet, Product product) throws SQLException {
+        product.setId(resultSet.getInt("product_id"));
+        product.setName(resultSet.getString("name"));
+        product.setDescription(resultSet.getString("description"));
+        product.setVendor(resultSet.getString("vendor"));
+        product.setUrlslug(resultSet.getString("urlSlug"));
+        product.setSku(resultSet.getString("sku"));
+        product.setPrice(resultSet.getDouble("price"));
     }
 }
 

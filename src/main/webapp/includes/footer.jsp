@@ -8,7 +8,7 @@
             </div>
             <div class="col-md-4">
                 <h3>Staff Login</h3>
-                <p>If you are a staff member, <a href="staff-login.html" style="color: #f0c14b;">login here</a>.</p>
+                <p>If you are a staff member, <a href="login.jsp" style="color: #f0c14b;">login here</a>.</p>
             </div>
         </div>
     </div>

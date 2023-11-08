@@ -2,6 +2,7 @@ package com.servlet;
 import com.connection.DBConnection;
 import com.dao.CartDao;
 import com.model.Product;
+import com.dao.ProductDao;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,22 +17,24 @@ public class CartServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException, ClassNotFoundException {
         // Parse the product slug from the request URL
-        String slug = request.getPathInfo().substring(1); // Remove the leading '/'
+        String slug = request.getPathInfo();
 
-        Product product = getProductBySlug(slug);
+        ProductDao pdao = new ProductDao(DBConnection.getConnection());
+
+        Product product = pdao.getProductBySlug(slug);
 
         if (product != null) {
             // Replace this with your logic to get the user's ID (e.g., from a session or request parameter)
             int userId = getUserIdFromSessionOrRequest(request);
 
-            // Get the quantity to add (you can parse it from the request parameters)
+            // Get the quantity to add
             int quantity = Integer.parseInt(request.getParameter("quantity"));
 
             // Initialize the CartDAO with your database connection
             CartDao cdao = new CartDao(DBConnection.getConnection());
 
             // Attempt to add the product to the user's cart
-            boolean addedToCart = cdao.addProductToCart(userId, product.getId(), quantity);
+            boolean addedToCart = cdao.addProductToCart(userId, product.getSku(), quantity);
 
             if (addedToCart) {
                 // Product added to the cart successfully
@@ -49,17 +52,13 @@ public class CartServlet {
         }
     }
 
-    private Product getProductBySlug(String slug) {
-        // Your implementation to fetch product details by slug
-        Product product = null;
-        slug = product.getUrlslug();
-        // Return null if the product is not found
-        return null;
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
     }
 
     private int getUserIdFromSessionOrRequest(HttpServletRequest request) {
         // Your implementation to get the user's ID from a session or request parameter
-        return 1; // Example: return a user ID
+        return Integer.parseInt((String) request.getAttribute("user_id")); // Example: return a user ID
     }
 
 }

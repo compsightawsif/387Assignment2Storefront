@@ -15,8 +15,8 @@
 </head>
 <body>
 <%
-    ProductDao productDAO = new ProductDao(DBConnection.getConnection());
-    List<Product> products = productDAO.getAllProducts();
+    ProductDao productDAO = new ProductDao(DBConnection.getConnection()); // Initialize the ProductDAO with your database connection
+    List<Product> products = productDAO.getAllProducts(); // Retrieve the products from the database
 %>
 
 <div id="products">
@@ -41,8 +41,8 @@
     </thead>
     <tbody>
     <%
-        OrderDao orderDAO = new OrderDao(DBConnection.getConnection());
-        List<Order> orders = orderDAO.getAllOrders();
+        OrderDao orderDAO = new OrderDao(DBConnection.getConnection()); // Initialize the ProductDAO with your database connection
+        List<Order> orders = orderDAO.getAllOrders(); // Retrieve the products from the database
 
         for (Order order : orders) {
     %>

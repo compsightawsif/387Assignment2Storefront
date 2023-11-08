@@ -9,34 +9,21 @@
     <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
 <body>
-<%
-    String orderId = request.getParameter("orderID");
-    int orderIdValue;
+<c:if test="${not empty param.orderID}">
+    <%
+        int orderID = Integer.parseInt(request.getParameter("orderID"));
+        OrderDao orderDAO = new OrderDao(DBConnection.getConnection());
+        Order order = orderDAO.getOrderByID(orderID);
 
-    if (orderId != null && !orderId.isEmpty()) {
-        // Order ID is provided in the URL
-        orderIdValue = Integer.parseInt(orderId);
-%>
-<%
-    OrderDao orderDAO = new OrderDao(DBConnection.getConnection());
-    Order order = orderDAO.getOrderByID(orderIdValue);
+    %>
+    <h2>Order ID: <%= order.getId() %></h2>
+    <p>Order Date: <%= order.getOrderDate() %></p>
+    <p>Status: <%= order.getStatus() %></p>
+    <p>Tracking Number: <%= order.getTrackingNumber() %></p>
 
-%>
-<h2>Order ID: <%= order.getId() %></h2>
-<p>Order Date: <%= order.getOrderDate() %></p>
-<p>Status: <%= order.getStatus() %></p>
-<p>Tracking Number: <%= order.getTrackingNumber() %></p>
-
-<%
-%>
-<%
-} else {
-    // Order ID is not provided in the URL
-%>
-<h2>Order ID is not provided in the URL</h2>
-<%
-    }
-%>
+    <%
+    %>
+</c:if>
 <div class="back-link">
     <a href="staff-main.jsp">Back to Staff Main Page</a>
 </div>

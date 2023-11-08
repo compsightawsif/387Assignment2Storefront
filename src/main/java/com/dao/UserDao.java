@@ -27,7 +27,7 @@ public class UserDao {
 			pst.setString(1, username);
 			pst.setString(2, password);
 			rs = pst.executeQuery();
-			System.out.println(rs);
+			//System.out.println(rs);
 			if (rs.next()) {
 				user = new User();
 				user.setId(rs.getInt("user_id"));

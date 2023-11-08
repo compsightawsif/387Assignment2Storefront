@@ -23,7 +23,7 @@
 </div>
 
 <%
-    ProductDao productDAO = new ProductDao(DBConnection.getConnection()); // Initialize the ProductDAO with your database connection
+    ProductDao productDAO = new ProductDao(DBConnection.getConnection()); // Initialize the ProductDAO with database connection
     List<Product> products = productDAO.getAllProducts(); // Retrieve the products from the database
 %>
 
@@ -34,11 +34,11 @@
         <h3><%= product.getName()%></h3>
         <p><%= product.getPrice()%></p>
         <form method="post" action="/cart/add">
-            <input type="hidden" name="productId" value="123"> <!-- Replace with your product ID -->
+            <input type="hidden" name="productId" value="123">
             <input type="submit" value="Add to Cart">
         </form>
 <%--        <button onclick="addToCart(<%= product.getName()%>, <%= product.getPrice()%>)">Add to Cart</button>--%>
-        <button onclick="viewProductDetails(<%= product.getName()%>)">View Details</button>
+        <button onclick="location.href = 'product-details.jsp?product=<%= product.getName()%>'">View Details</button>
     </div>
     <%}%>
 </div>
@@ -53,10 +53,6 @@
         const cartItemsList = document.getElementById('cart-items');
         cartItemsList.appendChild(cartItem);
     }
-
-    // function viewProductDetails(productName) {
-    //     window.location.href = 'product-details.jsp?product=' + encodeURIComponenent(productName);
-    // }
 </script>
     <%@include file="includes/footer.jsp" %>
 </body>
