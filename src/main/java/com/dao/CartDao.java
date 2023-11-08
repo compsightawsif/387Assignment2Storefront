@@ -16,6 +16,24 @@ public class CartDao {
         this.connection = connection;
     }
 
+    public void createCart (int userId){
+        if (getCart(userId) == null) {
+            String query;
+            PreparedStatement pst;
+            try {
+                query = "insert into storefront.cart (user_id) values (?);";
+                pst = this.connection.prepareStatement(query);
+                pst.setInt(1, userId);
+                pst.execute();
+                System.out.println("pst: " + pst);
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+    }
     public List<CartItem> getCart(int userId) {
         List<CartItem> cartItems = new ArrayList<>();
 
@@ -29,7 +47,7 @@ public class CartDao {
 
             if (!cartResultSet.next()) {
                 // No cart exists for the user, return an empty list
-                return cartItems;
+                return null;
             }
 
             // Retrieve the products in the user's cart

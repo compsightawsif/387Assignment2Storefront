@@ -2,6 +2,7 @@ package com.servlet;
 import com.connection.DBConnection;
 import com.dao.CartDao;
 import com.model.Product;
+import com.model.User;
 import com.dao.ProductDao;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

@@ -12,6 +12,7 @@ import java.sql.SQLException;
 
 import com.connection.DBConnection;
 import com.dao.UserDao;
+import com.dao.CartDao;
 import com.model.User;
 
 /**
@@ -40,8 +41,10 @@ public class LoginServlet extends HttpServlet {
             try {
                 UserDao udao = new UserDao(DBConnection.getConnection());
                 User user = udao.userLogin(username, password);
+                CartDao cdao = new CartDao(DBConnection.getConnection());
                 if (user != null) {
                     request.getSession().setAttribute("auth", user);
+                    cdao.createCart(user.getId());
                     if (user.getRole().equals("Staff")) {
                         response.sendRedirect("staff-main.jsp");
                     } else {
