@@ -11,16 +11,15 @@
 <body>
 <%
     String orderId = request.getParameter("orderID");
+    int orderIdValue;
 
     if (orderId != null && !orderId.isEmpty()) {
         // Order ID is provided in the URL
-        int orderIdValue = Integer.parseInt(orderId); // Assuming it's an integer
-        // You can use orderIdValue in your logic
+        orderIdValue = Integer.parseInt(orderId);
 %>
 <%
-    int orderID = Integer.parseInt(request.getParameter("orderID"));
-    OrderDao orderDAO = new OrderDao(DBConnection.getConnection()); // Initialize the ProductDAO with your database connection
-    Order order = orderDAO.getOrderByID(orderID); // Retrieve the products from the database
+    OrderDao orderDAO = new OrderDao(DBConnection.getConnection());
+    Order order = orderDAO.getOrderByID(orderIdValue);
 
 %>
 <h2>Order ID: <%= order.getId() %></h2>
@@ -35,7 +34,6 @@
     // Order ID is not provided in the URL
 %>
 <h2>Order ID is not provided in the URL</h2>
-<!-- Add your logic for when orderID is not provided -->
 <%
     }
 %>
