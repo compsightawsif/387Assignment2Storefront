@@ -40,12 +40,22 @@ public class ProductDao {
     public Product getProductbyID(int id) throws SQLException {
         Product product = null;
 
-        query = "SELECT product.product_id FROM storefront.product where product_id=?";
-        try (PreparedStatement statement = connection.prepareStatement(query);
-             ResultSet resultSet = statement.executeQuery()) {
+        try {
+            query = "SELECT * FROM storefront.product where product_id=?";
+            pst = this.connection.prepareStatement(query);
+            pst.setInt(1, id);
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                product = new Product();
+                product.setId(rs.getInt("product_id"));
+                product.setName(rs.getString("name"));
+                product.setDescription(rs.getString("description"));
+                product.setPrice(rs.getDouble("price"));
+                product.setVendor(rs.getString("vendor"));
+                product.setSku(rs.getString("sku"));
+                product.setUrlslug(rs.getString("urlSlug"));
 
-            product = new Product();
-            productAttributesResultSet(resultSet, product);
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -57,12 +67,22 @@ public class ProductDao {
     public Product getProductBySlug(String slug) throws SQLException {
         Product product = null;
 
-        query = "SELECT product.urlslug FROM storefront.product where urlSlug=?";
-        try (PreparedStatement statement = connection.prepareStatement(query);
-             ResultSet resultSet = statement.executeQuery()) {
+        try {
+            query = "SELECT * FROM storefront.product where urlSlug=?";
+            pst = this.connection.prepareStatement(query);
+            pst.setString(1, slug);
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                product = new Product();
+                product.setId(rs.getInt("product_id"));
+                product.setName(rs.getString("name"));
+                product.setDescription(rs.getString("description"));
+                product.setPrice(rs.getDouble("price"));
+                product.setVendor(rs.getString("vendor"));
+                product.setSku(rs.getString("sku"));
+                product.setUrlslug(rs.getString("urlSlug"));
 
-            product = new Product();
-            productAttributesResultSet(resultSet, product);
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
