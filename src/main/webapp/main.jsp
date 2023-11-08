@@ -38,7 +38,7 @@
             <input type="submit" value="Add to Cart">
         </form>
 <%--        <button onclick="addToCart(<%= product.getName()%>, <%= product.getPrice()%>)">Add to Cart</button>--%>
-        <button onclick="location.href = 'product-details.jsp?productID=<%= product.getId()%>'">View Details</button>
+        <button onclick="location.href = 'product-details.jsp?slug=<%= product.getUrlslug()%>'">View Details</button>
     </div>
     <%}%>
 </div>

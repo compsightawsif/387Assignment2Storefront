@@ -9,11 +9,11 @@
     <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
 <body>
-<c:if test="${not empty param.productID}">
+<c:if test="${not empty param.slug}">
     <%
-        int productID = Integer.parseInt(request.getParameter("productID"));
+        String slug = request.getParameter("slug");
         ProductDao productDAO = new ProductDao(DBConnection.getConnection());
-        Product product = productDAO.getProductbyID(productID);
+        Product product = productDAO.getProductBySlug(slug);
 
     %>
     <h2>Product Name: <%= product.getName() %></h2>
@@ -21,6 +21,7 @@
     <p>Price: <%= product.getPrice() %></p>
     <p>Vendor: <%= product.getVendor() %></p>
     <p>SKU: <%= product.getSku() %></p>
+    <p>Slug: <%= product.getUrlslug() %></p>
 
     <%
     %>
