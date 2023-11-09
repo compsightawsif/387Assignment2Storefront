@@ -45,16 +45,6 @@ public class OrderServlet extends HttpServlet {
 
 
         } else if (pathInfo.matches("/products/([a-zA-Z0-9-]+)")) {
-//            String slug = pathInfo.substring(pathInfo.lastIndexOf("/") + 1);
-//            Product product = YourDatabase.getProductBySlug(slug);
-//            if (product != null) {
-//                // Found the product
-//                response.setContentType("application/json");
-//                response.getWriter().write("{ \"name\": \"" + product.getName() + "\", \"slug\": \"" + product.getSlug() + "\" }");
-//            } else {
-//                // Product not found
-//                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-//            }
 
         } else {
             // Handle invalid or unknown requests

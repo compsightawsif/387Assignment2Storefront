@@ -8,7 +8,7 @@
             <a class="nav-link" href="cart.jsp">View Cart</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="login.jsp">Staff Login</a>
+            <a class="nav-link" href="login.jsp">Return to Login</a>
         </li>
     </ul>
 </nav>

@@ -16,7 +16,7 @@ public class CartDao {
         this.connection = connection;
     }
 
-    public void createCart (int userId){
+    public void createCart(int userId) {
         if (getCart(userId) == null) {
             String query;
             PreparedStatement pst;
@@ -25,7 +25,6 @@ public class CartDao {
                 pst = this.connection.prepareStatement(query);
                 pst.setInt(1, userId);
                 pst.execute();
-                System.out.println("pst: " + pst);
 
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -34,6 +33,24 @@ public class CartDao {
         }
 
     }
+
+    public void updateQuantity(int cartItemId, int quantity) {
+        String query;
+        PreparedStatement pst;
+        try {
+            query = "update storefront.cart_item set quantity = ? where cart_item_id = ?;";
+            pst = this.connection.prepareStatement(query);
+            pst.setInt(1, quantity);
+            pst.setInt(2, cartItemId);
+            pst.execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
     public List<CartItem> getCart(int userId) {
         List<CartItem> cartItems = new ArrayList<>();
 
@@ -63,7 +80,7 @@ public class CartDao {
                 int cartId = cartItemResultSet.getInt("cart_id");
                 int productId = cartItemResultSet.getInt("product_id");
                 int quantity = cartItemResultSet.getInt("quantity");
-                double price = cartItemResultSet.getDouble("price");
+                double price = cartItemResultSet.getDouble("total_price");
 
                 CartItem cartItem = new CartItem(cartItemId, cartId, productId, quantity, price);
                 cartItems.add(cartItem);
@@ -79,27 +96,12 @@ public class CartDao {
     public boolean clearCart(int userId) {
         try {
             // Check if the user has a cart
-            String checkCartQuery = "SELECT cart_id FROM Cart WHERE user_id = ?";
-            PreparedStatement checkCartStatement = connection.prepareStatement(checkCartQuery);
-            checkCartStatement.setInt(1, userId);
+            String clearCartQuery = "delete ci FROM storefront.cart_item ci join storefront.cart c on c.cart_id=ci.cart_id  WHERE c.user_id= ?";
+            PreparedStatement clearCartStatement = connection.prepareStatement(clearCartQuery);
+            clearCartStatement.setInt(1, userId);
 
-            ResultSet cartResultSet = checkCartStatement.executeQuery();
-
-            if (cartResultSet.next()) {
-                // The user has a cart; delete it
-                int cartId = cartResultSet.getInt("cart_id");
-
-                String clearCartQuery = "DELETE FROM Cart WHERE cart_id = ?";
-                PreparedStatement clearCartStatement = connection.prepareStatement(clearCartQuery);
-                clearCartStatement.setInt(1, cartId);
-
-                int deletedRows = clearCartStatement.executeUpdate();
-
-                return deletedRows > 0; // Check if the deletion was successful
-            } else {
-                // No cart exists for the user, no action needed
-                return true; // Consider this as a successful operation
-            }
+            int deletedRows = clearCartStatement.executeUpdate();
+            return deletedRows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false; // Handle any exceptions appropriately
@@ -109,9 +111,7 @@ public class CartDao {
     public boolean addProductToCart(int userId, String sku, int quantity) {
         try {
             // Check if the product is already in the user's cart
-            String checkQuery = "SELECT cart_item_id, quantity FROM Cart_Item WHERE cart_id = " +
-                    "(SELECT cart_id FROM Cart WHERE user_id = ?) AND product_id = " +
-                    "(SELECT product_id FROM Product WHERE sku = ?)";
+            String checkQuery = "SELECT * FROM storefront.cart_item ci JOIN storefront.cart c on ci.cart_id=c.cart_id JOIN storefront.product p ON ci.product_id = p.product_id WHERE c.user_id = ? AND p.sku = ?";
             PreparedStatement checkStatement = connection.prepareStatement(checkQuery);
             checkStatement.setInt(1, userId);
             checkStatement.setString(2, sku);
@@ -125,7 +125,7 @@ public class CartDao {
                 int newQuantity = currentQuantity + quantity;
 
                 // Update the quantity for the existing cart item
-                String updateQuery = "UPDATE Cart_Item SET quantity = ? WHERE cart_item_id = ?";
+                String updateQuery = "UPDATE storefront.cart_item SET quantity = ? WHERE cart_item_id = ?";
                 PreparedStatement updateStatement = connection.prepareStatement(updateQuery);
                 updateStatement.setInt(1, newQuantity);
                 updateStatement.setInt(2, cartItemId);
@@ -135,9 +135,9 @@ public class CartDao {
                 return updatedRows > 0; // Check if the update was successful
             } else {
                 // The product is not in the cart, so insert a new cart item
-                String insertQuery = "INSERT INTO Cart_Item (cart_id, product_id, quantity) " +
-                        "VALUES ((SELECT cart_id FROM Cart WHERE user_id = ?), " +
-                        "(SELECT product_id FROM Product WHERE sku = ?), ?)";
+                String insertQuery = "INSERT INTO storefront.cart_item (cart_id, product_id, quantity, total_price) " +
+                        "VALUES ((SELECT cart_id FROM storefront.cart WHERE user_id = ?), " +
+                        "(SELECT product_id FROM storefront.product WHERE sku = ?), ?, 0.00)";
                 PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
                 insertStatement.setInt(1, userId);
                 insertStatement.setString(2, sku);
@@ -186,6 +186,7 @@ public class CartDao {
             return false;
         }
     }
+
     public boolean setProductQuantityInCart(int userId, String sku, int quantity) {
         try {
             // Check if the user has a cart; if not, create one

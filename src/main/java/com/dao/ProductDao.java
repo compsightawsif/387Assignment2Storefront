@@ -100,7 +100,6 @@ public class ProductDao {
             pst.setString(1, sku);
             pst.setString(2, name);
             pst.execute();
-            System.out.println("pst: " + pst);
 
         } catch (SQLException e) {
             e.printStackTrace();

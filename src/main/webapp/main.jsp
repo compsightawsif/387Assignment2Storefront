@@ -33,7 +33,7 @@
     <div class="product">
         <h3><%= product.getName()%></h3>
         <p><%= product.getPrice()%></p>
-        <form method="post" action="/cart/add">
+        <form method="post" action="cart/products/<%= product.getUrlslug()%>">
             <input type="hidden" name="productId" value="123">
             <input type="submit" value="Add to Cart">
         </form>

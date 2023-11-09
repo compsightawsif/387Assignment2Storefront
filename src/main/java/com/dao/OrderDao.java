@@ -3,10 +3,7 @@ package com.dao;
 import com.model.Order;
 import com.model.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +17,48 @@ public class OrderDao {
         this.connection = connection;
     }
 
+    public int createOrder (int userId) throws SQLException{
+
+        try {
+            query = "INSERT INTO storefront.order (user_id, order_number, order_date, status, tracking_number) VALUES (?,1,?,?,'');";
+            pst = this.connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            pst.setInt(1, userId);
+            pst.setString(2, "2023-11-08");
+            pst.setString(3, "PENDING");
+            int rowsInserted = pst.executeUpdate();
+            if (rowsInserted > 0) {
+                // Get the generated keys (including the order_id)
+                try (ResultSet generatedKeys = pst.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        int orderId = generatedKeys.getInt(1); // Retrieve the generated order_id
+                        // Use orderId as needed
+                        return orderId;
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public void createOrderItem (int orderId, int productId, int userId, int quantity, double price) throws SQLException{
+
+        try {
+            query = "INSERT INTO storefront.order_item (order_id, product_id, user_id, order_date,quantity,total_price) VALUES (?,?,?,'2023-11-08 00:00:00', ?, ?);";
+            pst = this.connection.prepareStatement(query);
+            pst.setInt(1, orderId);
+            pst.setInt(2, productId);
+            pst.setInt(3, userId);
+            pst.setInt(4, quantity);
+            pst.setDouble(5, price);
+            pst.execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     public void shipOrder(int orderId, String trackingNumber) throws SQLException {
         try {
             query = "UPDATE storefront.order SET status = 'SHIPPED', tracking_number = ? WHERE order_id = ?;";
@@ -27,7 +66,6 @@ public class OrderDao {
             pst.setString(1, trackingNumber);
             pst.setInt(2, orderId);
             pst.execute();
-            System.out.println("pst: " + pst);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -64,7 +102,6 @@ public class OrderDao {
             pst = this.connection.prepareStatement(query);
             pst.setInt(1, user_id);
             rs = pst.executeQuery();
-            //System.out.println(rs);
             while (rs.next()) {
                 Order order = new Order();
                 order.setId(rs.getInt("order_id"));

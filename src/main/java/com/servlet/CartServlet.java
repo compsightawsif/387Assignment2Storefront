@@ -1,8 +1,12 @@
 package com.servlet;
 import com.connection.DBConnection;
 import com.dao.CartDao;
+import com.dao.OrderDao;
+import com.model.Cart;
+import java.util.List;
 import com.model.Product;
 import com.model.User;
+import com.model.CartItem;
 import com.dao.ProductDao;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -14,42 +18,45 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 @WebServlet("/cart/*")
-public class CartServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException, ClassNotFoundException {
+public class CartServlet extends HttpServlet{
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Parse the product slug from the request URL
-        String slug = request.getPathInfo();
-
-        ProductDao pdao = new ProductDao(DBConnection.getConnection());
-
-        Product product = pdao.getProductBySlug(slug);
-
-        if (product != null) {
-            // Replace this with your logic to get the user's ID (e.g., from a session or request parameter)
-            int userId = getUserIdFromSessionOrRequest(request);
-
-            // Get the quantity to add
-            int quantity = Integer.parseInt(request.getParameter("quantity"));
-
-            // Initialize the CartDAO with your database connection
+        String pathInfo = request.getPathInfo();
+        String redirect = "/387Assignment2Storefront/main.jsp";
+        try {
             CartDao cdao = new CartDao(DBConnection.getConnection());
+            ProductDao pdao = new ProductDao(DBConnection.getConnection());
+            OrderDao odao = new OrderDao(DBConnection.getConnection());
+            if (pathInfo != null && pathInfo.startsWith("/products/")) {
+                // Extract the slug from the URL
+                String slug = pathInfo.substring(pathInfo.lastIndexOf("/") + 1);
 
-            // Attempt to add the product to the user's cart
-            boolean addedToCart = cdao.addProductToCart(userId, product.getSku(), quantity);
+                // Get the user's ID from the session or wherever you store it
+                User u = (User) request.getSession().getAttribute("auth");
+                int userId = u.getId();
+                Product p = pdao.getProductBySlug(slug);
+                cdao.addProductToCart(u.getId(), p.getSku(), 1);
 
-            if (addedToCart) {
-                // Product added to the cart successfully
-                response.setStatus(HttpServletResponse.SC_CREATED); // HTTP 201 Created
-                response.getWriter().write("Product added to cart.");
-            } else {
-                // Failed to add the product to the cart
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // HTTP 500 Internal Server Error
-                response.getWriter().write("Failed to add product to cart.");
+            }else if (pathInfo != null && pathInfo.startsWith("/confirm")){
+                User u = (User) request.getSession().getAttribute("auth");
+                int orderId = odao.createOrder(u.getId());
+                List <CartItem> ci = cdao.getCart(u.getId());
+                for (CartItem item : ci) {
+                    odao.createOrderItem(orderId, item.getProductId(), u.getId(), item.getQuantity(), item.getPrice());
+                }
+                cdao.clearCart(u.getId());
+            } else if (pathInfo != null && pathInfo.startsWith("/update/")){
+                int cartItemId = Integer.parseInt(pathInfo.substring(pathInfo.lastIndexOf("/") + 1));
+                int quantity = Integer.parseInt(request.getParameter("quantity"));
+                cdao.updateQuantity(cartItemId, quantity);
+                redirect = "/387Assignment2Storefront/cart.jsp";
+            }else {
+                // Handle invalid or unknown requests
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
             }
-        } else {
-            // Product not found
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND); // HTTP 404 Not Found
-            response.getWriter().write("Product not found.");
+            response.sendRedirect(redirect);
+        }catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
         }
     }
 
