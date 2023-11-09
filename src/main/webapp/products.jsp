@@ -18,9 +18,7 @@
     <h2>Product Details</h2>
     <p>Product Name: Product 1</p>
     <p>Price: $19.99</p>
-    <!-- Include more product details here -->
 
-    <!-- Role-based button display -->
     <c:choose>
         <c:when test="${userRole == 'staff'}">
             <a href="modifyProduct.jsp" class="btn btn-primary">Modify Product</a>

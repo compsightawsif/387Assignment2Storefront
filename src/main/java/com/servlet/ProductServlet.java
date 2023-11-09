@@ -27,18 +27,15 @@ public class ProductServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String pathInfo = request.getPathInfo(); // Get the path information from the request URL
+        String pathInfo = request.getPathInfo();
 
         if (pathInfo == null || pathInfo.equals("/products")) {
             try {
                 ProductDao pdao = new ProductDao(DBConnection.getConnection());
-                // Fetch the list of products from the database or data source
-                List<Product> products = pdao.getAllProducts(); // Implement this method to retrieve products
+                List<Product> products = pdao.getAllProducts();
 
-                // Pass the list of products to the JSP page
                 request.setAttribute("products", products);
 
-                // Forward the request to the JSP page
                 request.getRequestDispatcher("/staff-main.jsp").forward(request, response);
             } catch (ClassNotFoundException | SQLException e) {
                 e.printStackTrace();
@@ -108,7 +105,6 @@ public class ProductServlet extends HttpServlet {
             }
 
         } else {
-            // Handle invalid or unknown requests
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }

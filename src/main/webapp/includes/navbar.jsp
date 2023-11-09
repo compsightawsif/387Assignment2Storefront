@@ -2,7 +2,6 @@
     <a class="navbar-brand" href="main.jsp">E-commerce Site</a>
     <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-<%--            <a class="nav-link" href="staff-main.jsp">Orders</a>--%>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="cart.jsp">View Cart</a>

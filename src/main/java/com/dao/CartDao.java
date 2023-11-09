@@ -266,7 +266,7 @@ public class CartDao {
                     return insertedRows > 0; // Check if the insertion was successful
                 } else {
                     // Quantity is zero; no action is needed
-                    return true; // Consider this as a successful operation
+                    return true;
                 }
             }
         } catch (SQLException e) {

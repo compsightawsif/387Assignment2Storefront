@@ -16,15 +16,10 @@
 
 <body>
 <h1>Welcome to our E-Commerce Store</h1>
-<div id="cart">
-    <h2>Shopping Cart</h2>
-    <ul id="cart-items">
-    </ul>
-</div>
 
 <%
-    ProductDao productDAO = new ProductDao(DBConnection.getConnection()); // Initialize the ProductDAO with database connection
-    List<Product> products = productDAO.getAllProducts(); // Retrieve the products from the database
+    ProductDao productDAO = new ProductDao(DBConnection.getConnection());
+    List<Product> products = productDAO.getAllProducts();
 %>
 
 <div id="products">
@@ -37,23 +32,11 @@
             <input type="hidden" name="productId" value="123">
             <input type="submit" value="Add to Cart">
         </form>
-<%--        <button onclick="addToCart(<%= product.getName()%>, <%= product.getPrice()%>)">Add to Cart</button>--%>
         <button onclick="location.href = 'product-details.jsp?slug=<%= product.getUrlslug()%>'">View Details</button>
     </div>
     <%}%>
 </div>
 
-<script>
-    function addToCart(productName, price) {
-        // Create a new list item for the cart
-        const cartItem = document.createElement('li');
-        cartItem.textContent = `${productName} - $${price}`;
-
-        // Add the item to the cart
-        const cartItemsList = document.getElementById('cart-items');
-        cartItemsList.appendChild(cartItem);
-    }
-</script>
     <%@include file="includes/footer.jsp" %>
 </body>
 </html>

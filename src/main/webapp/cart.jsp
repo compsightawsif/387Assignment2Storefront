@@ -30,9 +30,9 @@
         <tbody>
         <%
             User u = (User) request.getSession().getAttribute("auth");
-            CartDao cDAO = new CartDao(DBConnection.getConnection()); // Initialize the ProductDAO with your database connection
-            ProductDao pDAO = new ProductDao(DBConnection.getConnection()); // Initialize the ProductDAO with your database connection
-            List<CartItem> items = cDAO.getCart(u.getId()); // Retrieve the products from the database
+            CartDao cDAO = new CartDao(DBConnection.getConnection());
+            ProductDao pDAO = new ProductDao(DBConnection.getConnection());
+            List<CartItem> items = cDAO.getCart(u.getId());
 
             for (CartItem ci : items) {
                 Product p = pDAO.getProductbyID(ci.getProductId());
@@ -44,6 +44,11 @@
                 <input type="number" value="<%= ci.getQuantity() %>" min="1" max="99" id="quantityInput<%= ci.getCartItemId() %>" name="quantity">
                 <input type="submit" value="Update Item">
             </form>
+            <td>
+                <form method="post" action="cart/remove/"<%= ci.getCartItemId() %>">
+                    <input type="submit" value="Remove from Cart">
+                </form>
+            </td>
         </tr>
         <%
             }

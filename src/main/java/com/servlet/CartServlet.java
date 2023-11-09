@@ -20,7 +20,6 @@ import java.sql.SQLException;
 @WebServlet("/cart/*")
 public class CartServlet extends HttpServlet{
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Parse the product slug from the request URL
         String pathInfo = request.getPathInfo();
         String redirect = "/387Assignment2Storefront/main.jsp";
         try {
@@ -28,16 +27,15 @@ public class CartServlet extends HttpServlet{
             ProductDao pdao = new ProductDao(DBConnection.getConnection());
             OrderDao odao = new OrderDao(DBConnection.getConnection());
             if (pathInfo != null && pathInfo.startsWith("/products/")) {
-                // Extract the slug from the URL
                 String slug = pathInfo.substring(pathInfo.lastIndexOf("/") + 1);
 
-                // Get the user's ID from the session or wherever you store it
+
                 User u = (User) request.getSession().getAttribute("auth");
                 int userId = u.getId();
                 Product p = pdao.getProductBySlug(slug);
                 cdao.addProductToCart(u.getId(), p.getSku(), 1);
 
-            }else if (pathInfo != null && pathInfo.startsWith("/confirm")){
+            } else if (pathInfo != null && pathInfo.startsWith("/confirm")){
                 User u = (User) request.getSession().getAttribute("auth");
                 int orderId = odao.createOrder(u.getId());
                 List <CartItem> ci = cdao.getCart(u.getId());
@@ -50,8 +48,7 @@ public class CartServlet extends HttpServlet{
                 int quantity = Integer.parseInt(request.getParameter("quantity"));
                 cdao.updateQuantity(cartItemId, quantity);
                 redirect = "/387Assignment2Storefront/cart.jsp";
-            }else {
-                // Handle invalid or unknown requests
+            } else {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
             }
             response.sendRedirect(redirect);
@@ -61,12 +58,34 @@ public class CartServlet extends HttpServlet{
     }
 
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String pathInfo = request.getPathInfo();
+        String redirect = "/387Assignment2Storefront/cart.jsp"; // Default redirect to the cart page
 
+        try {
+            CartDao cdao = new CartDao(DBConnection.getConnection());
+
+            if (pathInfo != null && pathInfo.startsWith("/remove/")) {
+
+                User user = (User) request.getAttribute("auth");
+                int userId = user.getId();
+
+                Product product = (Product) request.getAttribute("sku");
+                String sku = product.getSku();
+                ProductDao pdao = new ProductDao(DBConnection.getConnection());
+                String productToRemove = String.valueOf(pdao.getProduct(sku));
+
+                int cartItemId = Integer.parseInt(pathInfo.substring(pathInfo.lastIndexOf("/") + 1));
+
+                cdao.removeProductFromCart(userId, productToRemove);
+
+            } else {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return; // Return to avoid the subsequent redirect in case of an error
+            }
+
+            response.sendRedirect(redirect);
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
     }
-
-    private int getUserIdFromSessionOrRequest(HttpServletRequest request) {
-        // Your implementation to get the user's ID from a session or request parameter
-        return Integer.parseInt((String) request.getAttribute("user_id")); // Example: return a user ID
-    }
-
 }

@@ -132,7 +132,7 @@ public class ProductDao {
 
     public List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
-        String query = "SELECT * FROM product"; // Adjust the query based on your actual table name
+        String query = "SELECT * FROM product";
 
         try (PreparedStatement statement = connection.prepareStatement(query);
              ResultSet resultSet = statement.executeQuery()) {
