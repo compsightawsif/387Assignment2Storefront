@@ -21,7 +21,7 @@ public class UserDao {
 		User user = null;
 		
 		try {
-			query = "select * from user where username = ? and password = ?";
+			query = "select * from user where username = ? and password = ? ";
 		
 			pst = this.connection.prepareStatement(query);
 			pst.setString(1, username);
@@ -37,7 +37,7 @@ public class UserDao {
 			
 		}
 		catch (SQLException e) {
-			
+			System.out.println(e.toString());
 		}
 	
 		return user;

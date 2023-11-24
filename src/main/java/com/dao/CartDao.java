@@ -21,7 +21,7 @@ public class CartDao {
             String query;
             PreparedStatement pst;
             try {
-                query = "insert into storefront.cart (user_id) values (?);";
+                query = "insert into cart (user_id) values (?);";
                 pst = this.connection.prepareStatement(query);
                 pst.setInt(1, userId);
                 pst.execute();
