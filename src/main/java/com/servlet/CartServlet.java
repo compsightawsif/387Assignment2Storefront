@@ -26,23 +26,30 @@ public class CartServlet extends HttpServlet{
             CartDao cdao = new CartDao(DBConnection.getConnection());
             ProductDao pdao = new ProductDao(DBConnection.getConnection());
             OrderDao odao = new OrderDao(DBConnection.getConnection());
+            User u = (User) request.getSession().getAttribute("auth");
+            Cart c = (Cart) request.getSession().getAttribute("cart");
+
             if (pathInfo != null && pathInfo.startsWith("/products/")) {
                 String slug = pathInfo.substring(pathInfo.lastIndexOf("/") + 1);
-
-
-                User u = (User) request.getSession().getAttribute("auth");
-                int userId = u.getId();
                 Product p = pdao.getProductBySlug(slug);
-                cdao.addProductToCart(u.getId(), p.getSku(), 1);
+                cdao.addProductToCart(c.getCartId(), p.getSku(), 1);
 
             } else if (pathInfo != null && pathInfo.startsWith("/confirm")){
-                User u = (User) request.getSession().getAttribute("auth");
-                int orderId = odao.createOrder(u.getId());
-                List <CartItem> ci = cdao.getCart(u.getId());
-                for (CartItem item : ci) {
-                    odao.createOrderItem(orderId, item.getProductId(), u.getId(), item.getQuantity(), item.getPrice());
+                if (u != null) {
+                    int orderId = odao.createOrder(u.getId());
+                    List <CartItem> ci = cdao.getCartItemsByCartId(c.getCartId());
+                    for (CartItem item : ci) {
+                        odao.createOrderItem(orderId, item.getProductId(), u.getId(), item.getQuantity(), item.getPrice());
+                    }
                 }
-                cdao.clearCart(u.getId());
+                else {
+                    int orderId = odao.createGuestOrder();
+                    List <CartItem> ci = cdao.getCartItemsByCartId(c.getCartId());
+                    for (CartItem item : ci) {
+                        odao.createGuestOrderItem(orderId, item.getProductId(), item.getQuantity(), item.getPrice());
+                    }
+                }
+                cdao.clearCart(c.getCartId());
             } else if (pathInfo != null && pathInfo.startsWith("/update/")){
                 int cartItemId = Integer.parseInt(pathInfo.substring(pathInfo.lastIndexOf("/") + 1));
                 int quantity = Integer.parseInt(request.getParameter("quantity"));

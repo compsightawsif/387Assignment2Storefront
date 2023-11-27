@@ -19,8 +19,8 @@ import com.model.Cart;
 /**
  * Servlet implementation class LoginServlet
  */
-@WebServlet("/user-login")
-public class LoginServlet extends HttpServlet {
+@WebServlet("/guest-login")
+public class GuestLoginServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -36,24 +36,13 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String userPasscode = request.getParameter("user_passcode");
-
             try {
-                UserDao udao = new UserDao(DBConnection.getConnection());
-                User user = udao.userLogin(Integer.parseInt(userPasscode));
                 CartDao cdao = new CartDao(DBConnection.getConnection());
-                if (user != null) {
-                    request.getSession().setAttribute("auth", user);
-                    Cart cart = cdao.createCart(user.getId());
-                    request.getSession().setAttribute("cart", cart);
-                    if (user.getRole().equals("Staff")) {
-                        response.sendRedirect("staff-main.jsp");
-                    } else {
-                        response.sendRedirect("main.jsp");
-                    }
-                } else {
-                    System.out.println("Not a valid user");
-                }
+                Cart cart = cdao.createGuestCart();
+                request.getSession().setAttribute("auth", null);
+                request.getSession().setAttribute("cart", cart);
+                response.sendRedirect("main.jsp");
+
             } catch (ClassNotFoundException | SQLException e) {
                 e.printStackTrace();
             }

@@ -23,7 +23,7 @@
     <h2>Product List</h2>
     <% for (Product product : products) { %>
     <div class="product">
-        <a href="product-details.jsp?productID=<%= product.getId() %>"><%= product.getName()%></a>
+        <a href="product-details.jsp?slug=<%= product.getUrlslug()%>"><%= product.getName()%></a>
         <p><%= product.getPrice()%></p>
     </div>
     <%}%>

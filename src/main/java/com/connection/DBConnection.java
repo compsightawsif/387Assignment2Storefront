@@ -13,7 +13,7 @@ public class DBConnection {
 //			Class.forName("com.mysql.cj.jdbc.Driver");
 //			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/storefront", "dbuser", "dbpass");
 			Class.forName("org.sqlite.JDBC");
-			connection = DriverManager.getConnection("jdbc:sqlite:storefront.db");
+			connection = DriverManager.getConnection("jdbc:sqlite:/Users/tawsif/IdeaProjects/387Assignment2Storefront/storefront.db");
 			System.out.println("connected");
 		}
 		return connection;

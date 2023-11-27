@@ -23,7 +23,7 @@ public class ProductDao {
     public Product getProduct(String sku) throws SQLException {
         Product product = null;
 
-        query = "SELECT product.sku FROM storefront.product where sku=?";
+        query = "SELECT product.sku FROM product where sku=?";
         try (PreparedStatement statement = connection.prepareStatement(query);
              ResultSet resultSet = statement.executeQuery()) {
 
@@ -41,7 +41,7 @@ public class ProductDao {
         Product product = null;
 
         try {
-            query = "SELECT * FROM storefront.product where product_id=?";
+            query = "SELECT * FROM product where product_id=?";
             pst = this.connection.prepareStatement(query);
             pst.setInt(1, id);
             rs = pst.executeQuery();
@@ -68,7 +68,7 @@ public class ProductDao {
         Product product = null;
 
         try {
-            query = "SELECT * FROM storefront.product where urlSlug=?";
+            query = "SELECT * FROM product where urlSlug=?";
             pst = this.connection.prepareStatement(query);
             pst.setString(1, slug);
             rs = pst.executeQuery();
@@ -110,7 +110,7 @@ public class ProductDao {
     public void updateProduct(int id, String name, String description, double price, String sku, String vendor, String slug) throws SQLException {
         Product product = null;
         try {
-            query = "update storefront.product set name = ?, description = ?, price = ?, sku = ?, vendor=?, urlSlug=? WHERE product_id=?;";
+            query = "update product set name = ?, description = ?, price = ?, sku = ?, vendor=?, urlSlug=? WHERE product_id=?;";
             pst = this.connection.prepareStatement(query);
             pst.setString(1, name);
             pst.setString(2, description);

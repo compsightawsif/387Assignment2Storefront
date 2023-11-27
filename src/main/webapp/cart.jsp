@@ -1,12 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.model.CartItem" %>
 <%@ page import="com.dao.CartDao" %>
 <%@ page import="com.dao.ProductDao" %>
-<%@ page import="com.model.User" %>
-<%@ page import="com.model.Product" %>
 <%@ page import="com.connection.DBConnection" %>
 <%@ page import="com.model.User" %>
+<%@ page import="com.model.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,10 +27,10 @@
         </thead>
         <tbody>
         <%
-            User u = (User) request.getSession().getAttribute("auth");
+            Cart c = (Cart) request.getSession().getAttribute("cart");
             CartDao cDAO = new CartDao(DBConnection.getConnection());
             ProductDao pDAO = new ProductDao(DBConnection.getConnection());
-            List<CartItem> items = cDAO.getCart(u.getId());
+            List<CartItem> items = cDAO.getCartItemsByCartId(c.getCartId());
 
             for (CartItem ci : items) {
                 Product p = pDAO.getProductbyID(ci.getProductId());

@@ -5,9 +5,7 @@
     <title>Login Page</title>
     <%@include file="includes/header.jsp" %>
     <meta charset="UTF-8">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    
-    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
 
@@ -19,22 +17,24 @@
                 <div class="card-body">
                     <form action="user-login" method="POST">
                         <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text" class="form-control" id="username" name="username" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" class="form-control" id="password" name="password" required>
+                            <label for="user_passcode">User Passcode</label>
+                            <input type="text" class="form-control" id="user_passcode" name="user_passcode" required>
                         </div>
                         <button type="submit" class="btn btn-primary">Login</button>
                     </form>
                 </div>
             </div>
+                <form method="post" action="guest-login">
+                    <input type="submit" value="Continue as guest">
+                </form>
+<%--            <div class="text-center my-3">--%>
+<%--                <a href="guest-home">Continue as guest</a>--%>
+<%--            </div>--%>
         </div>
     </div>
 </div>
 
-   <%@include file="includes/footer.jsp" %>
+<%@include file="includes/footer.jsp" %>
 
 </body>
 </html>
