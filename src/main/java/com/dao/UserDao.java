@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.exceptions.PasscodeChangeException;
 import com.model.User;
 
 public class UserDao {
@@ -39,20 +40,30 @@ public class UserDao {
 		return user;
 	}
 
-	public void changePermission(int userId, String role) throws SQLException {
-		User user = null;
-
+	public void changePermission(int userPasscode, String role) throws SQLException {
 		try {
-			query = "UPDATE user SET role = ? WHERE user_id = ?";
+			query = "UPDATE user SET role = ? WHERE user_passcode = ?";
 			pst = this.connection.prepareStatement(query);
 			pst.setString(1, role);
-			pst.setInt(2, userId);
-			rs = pst.executeQuery();
+			pst.setInt(2, userPasscode);
+			pst.execute();
 
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
 
+	public boolean setPasscode(int userId, int userPasscode) throws SQLException, PasscodeChangeException {
+		try {
+			query = "UPDATE user SET user_passcode = ? where user_id = ?";
+			pst = this.connection.prepareStatement(query);
+			pst.setInt(1, userPasscode);
+			pst.setInt(2, userId);
+			pst.execute();
+			return true;
+		} catch (SQLException e) {
+			return false;
+		}
 	}
 }

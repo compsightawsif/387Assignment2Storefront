@@ -111,8 +111,40 @@
         <input type="text" id="trackingNumber" name="trackingNumber" required>
         <button type="submit">Ship Order</button>
     </form>
+    <br>
     <h2>Update User Permissions</h2>
-    <form action=""
+    <form action="user/change-permission" method="post">
+        <div class="form-group">
+            <label for="userPasscode">User Passcode:</label>
+            <input type="text" class="form-control" id="userPasscode" name="userPasscode" required>
+        </div>
+        <div class="form-group">
+            <label for="role">Select Role:</label>
+            <select class="form-control" id="role" name="role" required>
+                <option value="Staff">Staff</option>
+                <option value="Customer">Customer</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Permissions</button>
+    </form>
+    <br>
+    <h2>Update User Passcode</h2>
+    <form action="user/change-passcode" method="post">
+        <div class="form-group">
+            <label for="userId">User ID:</label>
+            <input type="text" class="form-control" id="userId" name="userId" required>
+        </div>
+        <div class="form-group">
+            <label for="userPasscodeToChange">Enter New User Passcode:</label>
+            <input type="text" class="form-control" id="userPasscodeToChange" name="userPasscodeToChange" required>
+            <% if (request.getAttribute("errorMessage") != null) { %>
+            <div style="color: red;">
+                <%= request.getAttribute("errorMessage") %>
+            </div>
+            <% } %>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Passcode</button>
+    </form>
 </div>
 <%--<%@include file="includes/footer.jsp" %>--%>
 </body>
