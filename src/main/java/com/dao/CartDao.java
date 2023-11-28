@@ -262,39 +262,19 @@ public class CartDao {
         }
     }
 
-    public boolean removeProductFromCart(int userId, String sku) {
+    public void removeProductFromCart(int cartItemId) {
         try {
-            // Check if the product is in the user's cart
-            String checkQuery = "SELECT cart_item_id FROM Cart_Item WHERE cart_id = " +
-                    "(SELECT cart_id FROM Cart WHERE user_id = ?) AND product_id = " +
-                    "(SELECT product_id FROM Product WHERE sku = ?)";
-            PreparedStatement checkStatement = connection.prepareStatement(checkQuery);
-            checkStatement.setInt(1, userId);
-            checkStatement.setString(2, sku);
-
-            ResultSet resultSet = checkStatement.executeQuery();
-
-            if (resultSet.next()) {
-                // The product is in the cart, so remove it
-                int cartItemId = resultSet.getInt("cart_item_id");
-
-                // Delete the cart item from the cart
-                String deleteQuery = "DELETE FROM Cart_Item WHERE cart_item_id = ?";
-                PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery);
+            // Delete the cart item from the cart
+            String deleteQuery = "DELETE FROM Cart_Item WHERE cart_item_id = ?";
+            try (PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery)) {
                 deleteStatement.setInt(1, cartItemId);
-
-                int deletedRows = deleteStatement.executeUpdate();
-
-                return deletedRows > 0; // Check if the deletion was successful
-            } else {
-                // The product is not in the cart, so no action is needed
-                return true;
+                deleteStatement.executeUpdate();
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
     }
+
 
     public boolean setProductQuantityInCart(int userId, String sku, int quantity) {
         try {

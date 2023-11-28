@@ -111,6 +111,8 @@
         <input type="text" id="trackingNumber" name="trackingNumber" required>
         <button type="submit">Ship Order</button>
     </form>
+    <h2>Update User Permissions</h2>
+    <form action=""
 </div>
 <%--<%@include file="includes/footer.jsp" %>--%>
 </body>

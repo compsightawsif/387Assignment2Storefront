@@ -3,6 +3,7 @@ package com.servlet;
 import com.connection.DBConnection;
 import com.dao.OrderDao;
 import com.model.Order;
+import com.model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -25,29 +26,24 @@ public class OrderServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String pathInfo = request.getPathInfo(); // Get the path information from the request URL
+        String pathInfo = request.getPathInfo();
 
         if (pathInfo == null || pathInfo.equals("/orders")) {
             try {
                 OrderDao odao = new OrderDao(DBConnection.getConnection());
-                // Fetch the list of products from the database or data source
-                List<Order> orders = odao.getAllOrders(); // Implement this method to retrieve products
+                List<Order> orders = odao.getAllOrders();
 
-                // Pass the list of products to the JSP page
                 request.setAttribute("orders", orders);
 
-                // Forward the request to the JSP page
                 request.getRequestDispatcher("/staff-main.jsp").forward(request, response);
             } catch (ClassNotFoundException | SQLException e) {
                 e.printStackTrace();
 
             }
 
-
         } else if (pathInfo.matches("/products/([a-zA-Z0-9-]+)")) {
 
         } else {
-            // Handle invalid or unknown requests
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
@@ -59,19 +55,32 @@ public class OrderServlet extends HttpServlet {
         String pathInfo = request.getPathInfo();
         if (pathInfo != null && pathInfo.equals("/ship")) {
             response.setContentType("text/html;charset=UTF-8");
-            int orderid = Integer.parseInt(request.getParameter("orderID"));
+            int orderId = Integer.parseInt(request.getParameter("orderID"));
             String trackingNumber = request.getParameter("trackingNumber");
             try {
                 OrderDao odao = new OrderDao(DBConnection.getConnection());
-                odao.shipOrder(orderid, trackingNumber);
+                odao.shipOrder(orderId, trackingNumber);
                 response.sendRedirect("/387Assignment2Storefront/staff-main.jsp");
             } catch (ClassNotFoundException | SQLException e) {
                 e.printStackTrace();
 
             }
+        } else if (pathInfo != null && pathInfo.equals("/set-order-owner")) {
+            response.setContentType("text/html;charset=UTF-8");
+            User user = (User) request.getSession().getAttribute("auth");
+            int orderId = Integer.parseInt(request.getParameter("orderId"));
+            int userId = user.getId();
+
+            try {
+                OrderDao odao = new OrderDao(DBConnection.getConnection());
+                odao.setOrderOwner(orderId, userId);
+                response.sendRedirect("/387Assignment2Storefront/claim-order.jsp");
+
+            } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
 
         } else {
-            // Handle invalid or unknown requests
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }

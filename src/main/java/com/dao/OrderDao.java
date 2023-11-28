@@ -21,7 +21,7 @@ public class OrderDao {
         int orderId = 0;
 
         try {
-            String query = "INSERT INTO `order` (user_id, order_number, order_date, status, tracking_number) VALUES (?, 1, ?, ?, '')";
+            String query = "INSERT INTO `orders` (user_id, order_number, order_date, status, tracking_number) VALUES (?, 1, ?, ?, '')";
             String selectQuery = "SELECT last_insert_rowid()";
 
             try (PreparedStatement pst = this.connection.prepareStatement(query)) {
@@ -56,7 +56,7 @@ public class OrderDao {
         int orderId = 0;
         String selectQuery = "SELECT last_insert_rowid()";
         try {
-            String query = "INSERT INTO `order` (user_id, order_number, order_date, status, tracking_number) VALUES (null, 1, ?, ?, '')";
+            String query = "INSERT INTO `orders` (user_id, order_number, order_date, status, tracking_number) VALUES (null, 1, ?, ?, '')";
 
             try (PreparedStatement pst = this.connection.prepareStatement(query)) {
                 pst.setString(1, "2023-11-08");
@@ -118,7 +118,7 @@ public class OrderDao {
     }
     public void shipOrder(int orderId, String trackingNumber) throws SQLException {
         try {
-            query = "UPDATE order SET status = 'SHIPPED', tracking_number = ? WHERE order_id = ?;";
+            query = "UPDATE orders SET status = 'SHIPPED', tracking_number = ? WHERE order_id = ?;";
             pst = this.connection.prepareStatement(query);
             pst.setString(1, trackingNumber);
             pst.setInt(2, orderId);
@@ -132,7 +132,7 @@ public class OrderDao {
 
     public List<Order> getAllOrders() {
         List<Order> orders = new ArrayList<>();
-        String query = "SELECT * FROM order";
+        String query = "SELECT * FROM orders";
 
         try (PreparedStatement pst = connection.prepareStatement(query);
              ResultSet rs = pst.executeQuery()) {
@@ -155,7 +155,7 @@ public class OrderDao {
     public List<Order> getOrders(int user_id) throws SQLException {
         List<Order> orders = new ArrayList<>();
         try {
-            query = "SELECT * FROM order where user_id=?";
+            query = "SELECT * FROM orders where user_id=?";
             pst = this.connection.prepareStatement(query);
             pst.setInt(1, user_id);
             rs = pst.executeQuery();
@@ -179,7 +179,7 @@ public class OrderDao {
     public List<Order> getOrders(int user_id, int order_id) throws SQLException {
         List<Order> orders = new ArrayList<>();
         try {
-            query = "SELECT * FROM order where user_id=? and order_id=?";
+            query = "SELECT * FROM orders where user_id=? and order_id=?";
             pst = this.connection.prepareStatement(query);
             pst.setInt(1, user_id);
             pst.setInt(2, order_id);
@@ -204,7 +204,7 @@ public class OrderDao {
     public Order getOrderByID(int order_id) throws SQLException {
         Order order = null;
         try {
-            query = "SELECT * FROM order where order_id=?";
+            query = "SELECT * FROM orders where order_id=?";
             pst = this.connection.prepareStatement(query);
             pst.setInt(1, order_id);
             rs = pst.executeQuery();
@@ -226,7 +226,7 @@ public class OrderDao {
 
     public void setOrderOwner(int orderId, int userId) throws SQLException {
         Order order = null;
-        query = "UPDATE order SET user_id = ? WHERE order_id = ?";
+        query = "UPDATE orders SET user_id = ? WHERE order_id = ?";
         pst = this.connection.prepareStatement(query);
         pst.setInt(1, userId);
         pst.setInt(2, orderId);

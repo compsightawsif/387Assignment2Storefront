@@ -43,7 +43,7 @@
                 <input type="submit" value="Update Item">
             </form>
             <td>
-                <form method="post" action="cart/remove/"<%= ci.getCartItemId() %>">
+                <form method="post" action="cart/remove/<%= ci.getCartItemId() %>">
                     <input type="submit" value="Remove from Cart">
                 </form>
             </td>
