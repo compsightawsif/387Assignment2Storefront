@@ -54,7 +54,7 @@ public class UserDao {
 		}
 	}
 
-	public boolean setPasscode(int userId, int userPasscode) throws SQLException, PasscodeChangeException {
+	public boolean setPasscode(int userId, int userPasscode) throws SQLException {
 		try {
 			query = "UPDATE user SET user_passcode = ? where user_id = ?";
 			pst = this.connection.prepareStatement(query);

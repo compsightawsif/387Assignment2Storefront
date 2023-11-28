@@ -89,8 +89,7 @@ public class CartDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-
+        
     }
 
     public Cart getCartByUserId(int userId) {
