@@ -137,9 +137,10 @@
         <div class="form-group">
             <label for="userPasscodeToChange">Enter New User Passcode:</label>
             <input type="text" class="form-control" id="userPasscodeToChange" name="userPasscodeToChange" required>
-            <% if (request.getAttribute("errorMessage") != null) { %>
+            <% String errorMessage = request.getParameter("errorMessage"); %>
+            <% if (errorMessage != null && !errorMessage.isEmpty()) { %>
             <div style="color: red;">
-                <%= request.getAttribute("errorMessage") %>
+                <%= errorMessage %>
             </div>
             <% } %>
         </div>

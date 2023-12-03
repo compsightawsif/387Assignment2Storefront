@@ -43,16 +43,16 @@ public class UserServlet extends HttpServlet {
                 boolean passcodeChanged = udao.setPasscode(userId, userPasscodeToChange);
                 if (!passcodeChanged) {
                     request.setAttribute("errorMessage", "Failed to change passcode. Passcode already in use by another user.");
+                    response.sendRedirect(request.getContextPath() + "/staff-main.jsp?errorMessage=Update+failed.+Please+try+again.");
+//                    RequestDispatcher dispatcher = request.getRequestDispatcher("/staff-main.jsp");
+//                    dispatcher.forward(request, response);
                 }
                 else {
                     request.setAttribute("errorMessage", null);
+                    response.sendRedirect(request.getContextPath() + "/staff-main.jsp");
                 }
-                response.sendRedirect(request.getContextPath() + "/staff-main.jsp");
-            } catch (PasscodeChangeException e) {
-                request.setAttribute("errorMessage", e.getMessage());
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            } catch (ClassNotFoundException e) {
+
+            }  catch (ClassNotFoundException | SQLException e) {
                 throw new RuntimeException(e);
             }
         }
