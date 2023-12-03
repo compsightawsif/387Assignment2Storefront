@@ -2,6 +2,7 @@
 <%@ page import="com.model.Product" %>
 <%@ page import="com.dao.ProductDao" %>
 <%@ page import="com.connection.DBConnection" %>
+<%@ page import="com.model.User" %>
 <html>
 <head>
     <title>Order Details</title>
@@ -26,8 +27,23 @@
     <%
     %>
 </c:if>
+
+<%
+    User user = (User) request.getSession().getAttribute("auth");
+    if (user.getRole().equals("Customer")) {
+%>
 <div class="back-link">
     <a href="main.jsp">Back to Main Page</a>
 </div>
+<%
+    }else{
+%>
+<div class="back-link">
+    <a href="staff-main.jsp">Back to Product Dashboard</a>
+</div>
+
+<%
+    }
+%>
 </body>
 </html>

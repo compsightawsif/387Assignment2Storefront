@@ -88,7 +88,7 @@ public class ProductServlet extends HttpServlet {
 
         } else if (pathInfo != null && pathInfo.equals("/update")) {
             response.setContentType("text/html;charset=UTF-8");
-            int id = Integer.parseInt(request.getParameter("productIdToUpdate"));
+            int id = Integer.parseInt(request.getParameter("productId"));
             String name = request.getParameter("productNameToUpdate");
             String description = request.getParameter("productDescriptionToUpdate");
             double price = Double.parseDouble(request.getParameter("productPriceToUpdate"));

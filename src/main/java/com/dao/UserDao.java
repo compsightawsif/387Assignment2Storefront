@@ -4,8 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.exceptions.PasscodeChangeException;
+import com.model.Order;
 import com.model.User;
 
 public class UserDao {
@@ -65,5 +68,25 @@ public class UserDao {
 		} catch (SQLException e) {
 			return false;
 		}
+	}
+
+	public List<User> getAllUsers() {
+		List<User> users = new ArrayList<>();
+		String query = "SELECT * FROM user";
+
+		try (PreparedStatement pst = connection.prepareStatement(query);
+			 ResultSet rs = pst.executeQuery()) {
+			while (rs.next()) {
+				User u = new User();
+				u.setId(rs.getInt("user_id"));
+				u.setRole(rs.getString("role"));
+				u.setPasscode(rs.getInt("user_passcode"));
+				users.add(u);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return users;
 	}
 }

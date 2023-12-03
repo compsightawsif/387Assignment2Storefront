@@ -53,14 +53,14 @@ public class OrderServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String pathInfo = request.getPathInfo();
-        if (pathInfo != null && pathInfo.equals("/ship")) {
+        if (pathInfo.startsWith("/ship")) {
             response.setContentType("text/html;charset=UTF-8");
-            int orderId = Integer.parseInt(request.getParameter("orderID"));
+            int orderId = Integer.parseInt(request.getParameter("orderId"));
             String trackingNumber = request.getParameter("trackingNumber");
             try {
                 OrderDao odao = new OrderDao(DBConnection.getConnection());
                 odao.shipOrder(orderId, trackingNumber);
-                response.sendRedirect("/387Assignment2Storefront/staff-main.jsp");
+                response.sendRedirect("/387Assignment2Storefront/staff-main.jsp#orders");
             } catch (ClassNotFoundException | SQLException e) {
                 e.printStackTrace();
 
