@@ -1,6 +1,5 @@
 package com.dao;
 
-import com.model.Cart;
 import com.model.Order;
 
 import java.sql.*;
@@ -225,7 +224,6 @@ public class OrderDao {
     }
 
     public void setOrderOwner(int orderId, int userId) throws SQLException {
-        Order order = null;
         query = "UPDATE orders SET user_id = ? WHERE order_id = ?";
         pst = this.connection.prepareStatement(query);
         pst.setInt(1, userId);
