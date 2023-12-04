@@ -21,7 +21,7 @@
     <table class="table">
         <thead>
         <tr>
-            <th>Product Id</th>
+            <th>Product Name</th>
             <th>Quantity</th>
         </tr>
         </thead>
@@ -36,7 +36,8 @@
                 Product p = pDAO.getProductbyID(ci.getProductId());
         %>
         <tr>
-            <td><%= p.getName() %></td>
+            <td><a href="product-details.jsp?slug=<%= p.getUrlslug()%>"><%= p.getName() %>
+            </a></td>
             <form method="post" action="cart/update/<%= ci.getCartItemId() %>">
             <td>
                 <input type="number" value="<%= ci.getQuantity() %>" min="1" max="99" id="quantityInput<%= ci.getCartItemId() %>" name="quantity">
@@ -60,6 +61,8 @@
 </div>
 
 <%@include file="includes/footer.jsp" %>
-
+<footer>
+    <a class="nav-link" href="main.jsp">Return</a>
+</footer>
 </body>
 </html>

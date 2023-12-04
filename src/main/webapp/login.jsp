@@ -24,12 +24,11 @@
                     </form>
                 </div>
             </div>
+            <br>
                 <form method="post" action="guest-login">
-                    <input type="submit" value="Continue as guest">
+                    <button type="submit" class="btn btn-secondary">Continue as guest</button>
                 </form>
-<%--            <div class="text-center my-3">--%>
-<%--                <a href="guest-home">Continue as guest</a>--%>
-<%--            </div>--%>
+
         </div>
     </div>
 </div>

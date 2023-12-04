@@ -11,6 +11,7 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 h1, h2 {
+    /*color: #333;*/
     color: #333;
 }
 form {
@@ -51,4 +52,13 @@ button:hover {
     margin: 10px;
     width: 200px;
     float: right;
+}
+.card-img-top {
+    max-height: 200px;
+    min-height: 150px;
+    object-fit: cover;
+}
+img{
+    max-width:450px;
+    max-height:450px;
 }

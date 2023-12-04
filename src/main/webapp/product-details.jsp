@@ -18,6 +18,8 @@
 
     %>
     <h2>Product Name: <%= product.getName() %></h2>
+    <img src="images/<%= product.getSku()%>.jpg"
+         alt="<%= product.getName()%> Image"m>
     <p>Description: <%= product.getDescription() %></p>
     <p>Price: <%= product.getPrice() %></p>
     <p>Vendor: <%= product.getVendor() %></p>
